@@ -9,7 +9,6 @@ let osc;
 const initialSeq = ["C4", "E4", "G4", "B4", "C5", "A4"];
 function App() {
   // const [count, setCount] = useState(0);
-  //
   const [isOscOn, setIsOscOn] = useState(false);
   const [oscs, setOscs] = useState([]);
   const [synth, setSynth] = useState(new Tone.Synth().toDestination());
@@ -19,7 +18,10 @@ function App() {
 
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const octaves = [3, 4, 5];
-  // const newSequence = [];
+
+  // display notes/sequence as buttons in the browser DONE
+  // add 2 buttons to change each note up/down DONE
+  // function: subir tono/bajar tono
 
   function addOsc() {
     setOscs((state) => [
@@ -28,28 +30,28 @@ function App() {
     ]);
   }
 
-  // function syncFrequency() {
-  //   osc.syncFrequency((Tone.Transport.bpm.value *= 2));
-  //   console.log(osc.syncFrequency());
-  // }
-
   function stopOsc(osc) {
     osc.stop();
+  }
+
+  function loopA(time) {
+    // the sequence
+    for (let i = 0; i < sequence.length; i++) {
+      const note = sequence[i];
+      synth.triggerAttackRelease(note, "8n", time + i * Tone.Time("8n"));
+    }
   }
 
   function playSynth() {
     // let synth = new Tone.Synth().toDestination();
     setSequence(initialSeq);
     if (loop) {
-      loop.start();
+      loop.dispose();
     }
-    // Tone.Transport.start();
-
-    // synth.triggerAttackRelease("C4", "2n");
+    const newLoop = new Tone.Loop(loopA, "1n").start(0);
+    setLoop(newLoop);
+    Tone.Transport.start();
   }
-  // // function addSynth() {
-  // //   setSynth((state) => [new Tone.Synth("C4", "4n").toDestination()]);
-  // // }
 
   function changeSequence(newSequence) {
     setSequence(newSequence);
@@ -67,29 +69,7 @@ function App() {
     setSequence(newSequence);
   }
 
-  // function loopA() {
-  //   const loop = new Tone.Loop((time) => {
-  //     console.log(time);
-  //     // Play the sequence
-  //     for (let i = 0; i < sequence.length; i++) {
-  //       const note = sequence[i];
-  //       // Trigger the attack and release of each note in the sequence
-  //       Tone.Transport.schedule((time) => {
-  //         osc.triggerAttackRelease(note, "8n", time);
-  //       }, time);
-  //     }
-  //   }, "2n").start(0);
-  //   Tone.Transport.start(0.1);
-  //   setLoop(loop);
-  // }
-
-  // function loopA() {
-  //   const loop = new Tone.Loop((time) => {
-  //     // synth.triggerAttackRelease(note, time);
-  //     // console.log(time);
-  //   }, "2n").start(0);
-  //   Tone.Transport.start(0.1);
-  // }
+  function chooseSeq() {}
 
   useEffect(() => {
     const synthseq = new Tone.Synth().toDestination();
@@ -122,36 +102,34 @@ function App() {
   //   };
   // }, [sequence]);
 
-  // sync oscillators
-  // play synth + add effects -- SEQUENCER, LOOP
-  // add textures
   return (
     <div>
-      {/* <button onClick={() => handleClick()}>
-        {isOscOn ? "Stop Oscillator" : "Start Oscillator"}
-      </button> */}
-      {/* {oscs.map((osc) => (
-        <>
-          <button onClick={() => osc.start()}>Play</button>
-        </>
-      ))} */}
-      {oscs.map((osc) => (
-        <div key={osc}>
-          <button onClick={() => osc.start()}>Play</button>
-          <button onClick={() => stopOsc(osc)}>Stop</button>
+      {sequence.map((note, index) => (
+        <div key={index} className="note-container">
+          <button>{note}</button>
+          <button onClick={() => changeNoteUp(index)}>Up</button>
+          <button onClick={() => changeNoteDown(index)}>Down</button>
         </div>
       ))}
+      <div>
+        {oscs.map((osc) => (
+          <div key={osc}>
+            <button onClick={() => osc.start()}>Play</button>
+            <button onClick={() => stopOsc(osc)}>Stop</button>
+          </div>
+        ))}
+      </div>
 
       <div>
         <input value={input} onChange={(e) => setInput(e.target.value)} />
         <button onClick={addOsc}>add new osc</button>
-        <button onClick={playSynth}>play synth</button>
+        <button onClick={playSynth}>seq one</button>
         <button
           onClick={() => changeSequence(["D4", "F4", "A4", "C5", "G4", "B4"])}
         >
-          change sequence
+          seq two
         </button>
-        <button onClick={randomSeq}>random sequence</button>
+        <button onClick={randomSeq}>random seq</button>
       </div>
     </div>
   );
