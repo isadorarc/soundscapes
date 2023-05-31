@@ -6,6 +6,7 @@ import { Sequence } from "tone";
 import "./App.css";
 
 let osc;
+let birdSample;
 const initialSeq = ["C4", "E4", "G4", "B4", "C5", "A4"];
 function App() {
   // const [count, setCount] = useState(0);
@@ -15,13 +16,10 @@ function App() {
   const [input, setInput] = useState();
   const [sequence, setSequence] = useState([]);
   const [loop, setLoop] = useState(null);
+  const [sample, setSample] = useState();
 
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const octaves = [3, 4, 5];
-
-  // display notes/sequence as buttons in the browser DONE
-  // add 2 buttons to change each note up/down DONE
-  // function: subir tono/bajar tono
 
   function addOsc() {
     setOscs((state) => [
@@ -34,6 +32,7 @@ function App() {
     osc.stop();
   }
 
+  // loop not working :(
   function loopA(time) {
     // the sequence
     for (let i = 0; i < sequence.length; i++) {
@@ -42,13 +41,14 @@ function App() {
     }
   }
 
+  // LOOP ???????
   function playSynth() {
     // let synth = new Tone.Synth().toDestination();
     setSequence(initialSeq);
     if (loop) {
-      loop.dispose();
+      loop.start();
     }
-    const newLoop = new Tone.Loop(loopA, "1n").start(0);
+    const newLoop = new Tone.Loop(loopA, "6n").start(0);
     setLoop(newLoop);
     Tone.Transport.start();
   }
@@ -69,7 +69,51 @@ function App() {
     setSequence(newSequence);
   }
 
-  function chooseSeq() {}
+  function noteUp(index) {
+    setSequence((prevSequence) => {
+      const newSequence = [...prevSequence];
+      const currentNote = newSequence[index];
+      const currentNoteIndex = notes.indexOf(currentNote.charAt(0));
+      const currentOctave = parseInt(currentNote.charAt(1));
+      const newNoteIndex = (currentNoteIndex + 1) % notes.length;
+      const newOctave =
+        currentOctave + Math.floor((currentNoteIndex + 1) / notes.length);
+      const updatedOctave = octaves.includes(newOctave)
+        ? newOctave
+        : currentOctave;
+      const newNote = notes[newNoteIndex] + updatedOctave;
+      newSequence[index] = newNote;
+      return newSequence;
+    });
+  }
+
+  function noteDown(index) {
+    setSequence((prevSequence) => {
+      const newSequence = [...prevSequence];
+      const currentNote = newSequence[index];
+      const currentNoteIndex = notes.indexOf(currentNote.charAt(0));
+      const currentOctave = parseInt(currentNote.charAt(1));
+      const newNoteIndex = (currentNoteIndex - 1 + notes.length) % notes.length;
+      const newOctave =
+        currentOctave -
+        Math.floor((currentNoteIndex - 1 + notes.length) / notes.length);
+      const updatedOctave = octaves.includes(newOctave)
+        ? newOctave
+        : currentOctave;
+      const newNote = notes[newNoteIndex] + updatedOctave;
+      newSequence[index] = newNote;
+      return newSequence;
+    });
+  }
+
+  // sample not working :(
+  function playSample() {
+    const sampleIs =
+      "/Users/isadorareig/Desktop/music-app-project/user/public/tanpura g sharp copia/01 Tanpura Gsharp.mp3";
+    const player = new Tone.Player(sampleIs).toDestination();
+    setSample(player);
+    // sample.start();
+  }
 
   useEffect(() => {
     const synthseq = new Tone.Synth().toDestination();
@@ -106,9 +150,10 @@ function App() {
     <div>
       {sequence.map((note, index) => (
         <div key={index} className="note-container">
+          {/* button shows current note or just button?? */}
           <button>{note}</button>
-          <button onClick={() => changeNoteUp(index)}>Up</button>
-          <button onClick={() => changeNoteDown(index)}>Down</button>
+          <button onClick={() => noteUp(index)}>▲</button>
+          <button onClick={() => noteDown(index)}>▼</button>
         </div>
       ))}
       <div>
@@ -118,6 +163,9 @@ function App() {
             <button onClick={() => stopOsc(osc)}>Stop</button>
           </div>
         ))}
+      </div>
+      <div>
+        <button onClick={playSample}>Play Sample</button>
       </div>
 
       <div>
