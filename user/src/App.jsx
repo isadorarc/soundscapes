@@ -21,6 +21,8 @@ function App() {
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const octaves = [3, 4, 5];
 
+  // oscillation sound source
+  // still not finished! need to add the harmonic sync to 2 or 3 osc
   function addOsc() {
     setOscs((state) => [
       ...state,
@@ -69,6 +71,7 @@ function App() {
     setSequence(newSequence);
   }
 
+  // changes note in the current octave UP to octave 5
   function noteUp(index) {
     setSequence((prevSequence) => {
       const newSequence = [...prevSequence];
@@ -87,6 +90,7 @@ function App() {
     });
   }
 
+  // changes note in the current octave DOWN to octave 3
   function noteDown(index) {
     setSequence((prevSequence) => {
       const newSequence = [...prevSequence];
@@ -115,6 +119,7 @@ function App() {
     // sample.start();
   }
 
+  // synth sound + sequencer
   useEffect(() => {
     const synthseq = new Tone.Synth().toDestination();
     const seq = new Tone.Sequence((time, note) => {
