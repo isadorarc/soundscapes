@@ -9,7 +9,7 @@ The project idea is a synthesizer where the user can create generative sequences
 ## Tech stack and installation
 
 The project has been created using React.
-The llibrary used for the sound generation and interface is tone.js.
+The library used for the sound generation and interface is tone.js.
 The back has not been built yet.
 
 **Installation of Tone.js**
@@ -24,7 +24,7 @@ To import Tone.js:
 
 `import * as Tone from 'tone'`
 
-Sound llibrary >> [API documentation Tone.js](https://tonejs.github.io/docs/14.7.77/index.html)
+Sound library >> [API documentation Tone.js](https://tonejs.github.io/docs/14.7.77/index.html)
 
 > Tone.js is a Web Audio framework for creating interactive music in the browser. The architecture of Tone.js aims to be familiar to both musicians and audio programmers creating web-based audio applications. On the high-level, Tone offers common DAW (digital audio workstation) features like a global transport for synchronizing and scheduling events as well as prebuilt synths and effects. Additionally, Tone provides high-performance building blocks to create your own synthesizers, effects, and complex control signals.
 
