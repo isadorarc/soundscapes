@@ -1,5 +1,13 @@
+@font-face {
+  font-family: "Dina Remaster";
+  src: url("/public/fonts/DinaRemasterII.ttc") format("truetype-collection");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif,
+    Dina Remaster;
   line-height: 1.5;
   font-weight: 400;
 
@@ -25,9 +33,8 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
+  width: 100%;
   min-height: 100vh;
 }
 
@@ -58,7 +65,7 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #292929;
   }
   a:hover {
     color: #747bff;

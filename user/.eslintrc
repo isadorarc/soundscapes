@@ -1,0 +1,36 @@
+{
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:react-hooks/recommended",
+		"plugin:import/recommended"
+	],
+	"settings": {
+		"react": {
+			// Tells eslint-plugin-react to automatically detect the version of React to use.
+			"version": "detect"
+		},
+		// Tells eslint how to resolve imports
+		"import/resolver": {
+			"node": {
+				"paths": [
+					"src"
+				],
+				"extensions": [
+					".js",
+					".jsx",
+					".ts",
+					".tsx"
+				]
+			}
+		}
+	},
+	"env": {
+		"browser": true,
+		"node": true
+	},
+	"rules": {
+		"no-unused-vars": "warn",
+		"no-trailing-spaces": "error"
+	}
+}
